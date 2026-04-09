@@ -1,0 +1,29 @@
+﻿services:
+  postgres:
+    image: postgres:16
+    container_name: stockflow_db
+    environment:
+      POSTGRES_USER: stockflow
+      POSTGRES_PASSWORD: stockflow123
+      POSTGRES_DB: stockflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db:/docker-entrypoint-initdb.d
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: stockflow_pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@stockflow.com
+      PGADMIN_DEFAULT_PASSWORD: admin123
+    ports:
+      - "5050:80"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  pgdata:
